@@ -1,0 +1,13 @@
+<shader name="diffuse" >
+  <source>
+    <vertex file="Shader/diffuse.vsh" ></vertex>
+    <fragment file="Shader/diffuse.fsh" ></fragment>
+  </source>
+  <uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+  <uniform name="NormalMatrix" type="mat3x3" > </uniform>
+  <uniform name="ModelMatrix" type="mat4x4" > </uniform>
+  <uniform name="Ambient" type="vec3" > </uniform>
+  <uniform name="Diffuse" type="vec3" > </uniform>
+  <uniform name="Specular" type="vec3" > </uniform>
+  <uniform name="Shininess" type="float" > </uniform>
+</shader>

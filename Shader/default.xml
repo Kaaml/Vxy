@@ -1,0 +1,7 @@
+﻿<shader name="default" >
+  <source>
+    <vertex file="Shader/default.vsh" ></vertex>
+    <fragment file="Shader/default.fsh" ></fragment>
+  </source>
+  <uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+</shader>

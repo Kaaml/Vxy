@@ -1,0 +1,30 @@
+<texture name="nazwa_tex" file="gfx/grass.tga" />
+
+<material name="nazwa_mat" >
+	<pass name="nazwa_pas" >
+		<shader name="NazwaShaderu" ></shader>
+		 <sampler texture="nazwa_z_mgr" sampler="1" min_filter="" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+	</pass>	
+
+</material>
+
+
+
+
+<shader name="PointLight" >
+  <source>
+    <vertex file="Shader/PointLight.vsh" ></vertex>
+    <fragment file="Shader/PointLight.fsh" ></fragment>
+  </source>
+  <uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+  <uniform name="ModelViewMatrix" type="mat4x4" > </uniform>
+  <uniform name="CameraPosition" type="vec3" > </uniform>
+  <uniform name="LightPosition" type="vec3" > </uniform>
+  <uniform name="LightAmbient" type="vec3" > </uniform>
+  <uniform name="LightDiffuse" type="vec3" > </uniform>
+  <uniform name="LightSpecular" type="vec3" > </uniform>
+  <uniform name="LightPosition" type="vec3" > </uniform>
+  <uniform name="LightRadius" type="float" > </uniform>
+  <uniform name="LightSpecularPower" type="float" > </uniform>
+ <!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+</shader>

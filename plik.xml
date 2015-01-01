@@ -1,0 +1,21 @@
+<!-- <shader name="nazwa_programu" >
+	<vertex file="plik.glsl" >
+		<uniform name="blalblb" type="float" > </uniform>
+		<uniform name="jakis" 	type="vec3" > </uniform>
+		<uniform name="jakis" 	type="mat4x4"> </uniform>
+	</vertex>
+	<fragment file="plik2.glsl" >
+		<uniform name="jakis" type="mat4x4" > </uniform>
+	</fragment>
+</shader>
+<!--moze tak : -->
+<shader name="nazwa_programu" >
+	<source> 
+		<vertex file="Shader/Null_v.glsl" ></vertex>
+		<fragment file="Shader/Null_f.glsl" ></fragment>
+	</source>
+		<uniform name="Model" type="mat4x4"  >default value</uniform>
+		<uniform name="ViewMatrix" type="mat4x4"   >default value</uniform>
+		<uniform name="ProjectionMatrix" type="mat4x4" >default value</uniform>	
+		<uniform name="ModelViewProjection" type="mat4x4" >default value</uniform>	
+</shader>

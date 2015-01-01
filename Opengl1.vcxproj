@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals" />
+  <PropertyGroup Label="Globals">
+    <RootNamespace>Opengl1</RootNamespace>
+    <ProjectGuid>{ACCC6918-5219-E0D2-6FBC-2C67B4038B40}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>D:\Library\assimp--2.0.863-sdk\include\;D:\Library\glfw_3.0.1\include;D:\Library\pugixml-1.2\src;D:\Library\glew-1.7.0\include;D:\library\glm-0.9.3.2\;D:\library\DevIL-SDK-x86-1.7.8\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>d:\Library\assimp--2.0.863-sdk\lib\assimp_debug-dll_win32;D:\Library\glfw_3.0.1\lib-msvc110;D:\Library\glew-1.7.0\lib;D:\Library\DevIL-SDK-x86-1.7.8\lib;D:\Library\GLFW-2.7.2\lib-msvc100\debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;DevIL.lib;ILUT.lib;ILU.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AbstractAttachBuffer.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CameraMatrix.cpp" />
+    <ClCompile Include="cCamera.cpp" />
+    <ClCompile Include="cMaterial.cpp" />
+    <ClCompile Include="cMesh3d.cpp" />
+    <ClCompile Include="cModel.cpp" />
+    <ClCompile Include="cProgramShader.cpp" />
+    <ClCompile Include="cShader.cpp" />
+    <ClCompile Include="cShaderManager.cpp" />
+    <ClCompile Include="Fbo.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="Keyboard.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderPass.cpp" />
+    <ClCompile Include="RenderStage.cpp" />
+    <ClCompile Include="RenderTechnique.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ShaderFunc.cpp" />
+    <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TextureSampler.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Uniform.cpp" />
+    <ClCompile Include="VBOManager.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexDeclaration.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractAttachBuffer.hpp" />
+    <ClInclude Include="Application.hpp" />
+    <ClInclude Include="CameraMatrix.hpp" />
+    <ClInclude Include="cCamera.hpp" />
+    <ClInclude Include="cMaterial.hpp" />
+    <ClInclude Include="cMesh3d.hpp" />
+    <ClInclude Include="cModel.hpp" />
+    <ClInclude Include="cProgramShader.hpp" />
+    <ClInclude Include="cShader.hpp" />
+    <ClInclude Include="cShaderManager.hpp" />
+    <ClInclude Include="Fbo.hpp" />
+    <ClInclude Include="Keyboard.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Light.hpp" />
+    <ClInclude Include="MaterialManager.hpp" />
+    <ClInclude Include="Node.hpp" />
+    <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Renderer.hpp" />
+    <ClInclude Include="RenderPass.hpp" />
+    <ClInclude Include="RenderStage.hpp" />
+    <ClInclude Include="RenderTechnique.hpp" />
+    <ClInclude Include="SceneManager.hpp" />
+    <ClInclude Include="ShaderFunc.hpp" />
+    <ClInclude Include="Singleton.hpp" />
+    <ClInclude Include="Surface.hpp" />
+    <ClInclude Include="TextureManager.hpp" />
+    <ClInclude Include="TextureSampler.hpp" />
+    <ClInclude Include="VBOManager.hpp" />
+    <ClInclude Include="VertexDeclaration.hpp" />
+    <ClInclude Include="VerticesEnums.hpp" />
+    <ClInclude Include="Include.hpp" />
+    <ClInclude Include="IndexBuffer.hpp" />
+    <ClInclude Include="Material.hpp" />
+    <ClInclude Include="Texture2D.hpp" />
+    <ClInclude Include="Transform.hpp" />
+    <ClInclude Include="Uniform.hpp" />
+    <ClInclude Include="VertexBuffer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="Shader\Texture.shad" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
