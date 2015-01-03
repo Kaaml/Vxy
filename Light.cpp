@@ -52,6 +52,10 @@ void Light::SetDirection( const glm::vec3 &Direction )
 {
 	mDirection = Direction;
 }
+void Light::SetSpotDirection( const glm::vec3 &SpotDirection )
+{
+	mDirection = SpotDirection;
+}
 void Light::SetSpotExponent( float Exponent )
 { 
 	mSpotExponent = Exponent;
@@ -109,9 +113,27 @@ Material& Light::GetMaterial() const
 	return *pMaterial;
 }
 
+float Light::GetSpotCutoff() const
+{
+	return mSpotCutoff;
+}
+
+const glm::vec3& Light::GetSpotDirection() const
+{
+	return mDirection;
+}
+
 void Light::SetMaterial( Material *pMat )
 {
 	pMaterial = pMat;
+}
+
+void Light::SetSpotLight( const glm::vec3& Position, const glm::vec3& SpotDirection, float SpotCutoff, const glm::vec3& color )
+{
+	mLightPosition = Position;
+	mDirection = SpotDirection;
+	mDiffuseColor = color;
+	mSpotCutoff = SpotCutoff;
 }
 Light::~Light(void)
 {

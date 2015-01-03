@@ -87,8 +87,8 @@ bool Texture2D::LoadWithFile( const std::string &ImageName )
 	ILenum Error = ilGetError();
 	if( Error != IL_NO_ERROR )
 	{
+		std::cerr << "ERROR: Wczytanie tekstury: "<< "nie powiodlo sie, plik: " << ImageName << " nie zostal wczytany" << std::endl;
 		return false;
-		std::cerr << "ERROR: Wczytanie tekstury: "<< " nie powiodlo sie, plik: " << ImageName << " nie zostal wczytany" << std::endl;
 	}
 	int width, height, depth;
 	ILenum type, format;
@@ -104,6 +104,7 @@ bool Texture2D::LoadWithFile( const std::string &ImageName )
 	ilDeleteImage( image );
 	return true;
 }
+
 void Texture2D::Bind( int location )
 {
 	glActiveTexture( GL_TEXTURE0 + location );

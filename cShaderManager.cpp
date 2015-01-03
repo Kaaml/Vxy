@@ -32,12 +32,15 @@ cShaderManager::cShaderManager(void)
 	AddUniformDataFunc( "Diffuse"  , &Diffuse );
 	AddUniformDataFunc( "Specular" , &Specular );
 	AddUniformDataFunc( "LightRadius"		, &LightRadius );
-	AddUniformDataFunc( "LightPosition"	   , &LightPosition );
-	AddUniformDataFunc( "LightAmbient"	   , &LightAmbient );
+	AddUniformDataFunc( "Light.Position"	   , &LightPosition );
+	AddUniformDataFunc( "Light.Color"	   , &LightAmbient );
 	AddUniformDataFunc( "LightDiffuse"	   , &LightDiffuse );
 	AddUniformDataFunc( "LightSpecular"	   , &LightSpecular );
-	AddUniformDataFunc( "LightSpecularPower" , &LightSpecularPower );
+	AddUniformDataFunc( "Light.SpecularExponent" , &LightSpecularPower );
+	AddUniformDataFunc( "Light.SpotDirection", &LightSpotDirection );
+	AddUniformDataFunc( "Light.SpotCutoff", &LightSpotCutoff );
 	AddUniformDataFunc( "CameraPosition", &CameraPosition );
+	AddUniformDataFunc( "ScreenSize", &ScreenResolution );
 
 }
 
@@ -385,7 +388,7 @@ cShader* cShaderManager::GetShader( const std::string &ShaderName )
 		return it->second;
 	}else
 	{
-		std::cerr << "ERROR: Not found shader: " << ShaderName << std::endl;
+		//std::cerr << "ERROR: Not found shader: " << ShaderName << std::endl;
 		return nullptr;
 	}
 }
@@ -397,7 +400,7 @@ cProgramShader* cShaderManager::GetProgram( const std::string &ProgramName )
 		return it->second;
 	}else
 	{
-		std::cerr << "ERROR: Not found program: " << ProgramName << std::endl;
+		//std::cerr << "ERROR: Not found program: " << ProgramName << std::endl;
 		return nullptr;
 	}
 }

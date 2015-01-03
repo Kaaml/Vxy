@@ -20,11 +20,14 @@ public:
 	void SetSpecular( const glm::vec3 &Speuclar );
 
 	void SetDirection( const glm::vec3 &Direction );
+	void SetSpotDirection( const glm::vec3 &SpotDirection );
 	void SetSpotExponent( float Exponent );
 	void SetSpotCutoff( float SpotCutoff );
 	void SetRadiu( float Radius );
 	void SetSpecularPower( float SpecPower );
 	void SetMaterial( Material *pMat );
+	// SPOT LIGHT SET UP FUNCTION
+	void SetSpotLight( const glm::vec3& Position, const glm::vec3& SpotDirection, float SpotCutoff, const glm::vec3& color = glm::vec3( 1.f ) );
 
 	Material* GetMaterialPtr() const;
 	Material& GetMaterial() const;
@@ -33,8 +36,10 @@ public:
 	const glm::vec3& GetAmbient() const;
 	const glm::vec3& GetDiffuse() const;
 	const glm::vec3& GetSpecular() const;
+	const glm::vec3& GetSpotDirection() const;
 	float GetRadius() const;
 	float GetSpecularPower() const;
+	float GetSpotCutoff() const;
 	LightType GetLightType() const;
 private:
 	LightType mLightType;

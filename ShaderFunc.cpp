@@ -130,3 +130,24 @@ void CameraPosition( void* data, uint size )
 	glm::vec3 CamPos = Render->GetActiveCameraPtr()->GetCameraPos();
 	memcpy( data, (void*) &CamPos, size );
 }
+
+void ScreenResolution( void* data, uint size )
+{
+	Renderer* Render = Renderer::GetSingletonPtr();
+	glm::vec2 Resolution = Render->GetResolution();
+	memcpy( data, (void*)&Resolution, size );
+}
+
+void LightSpotCutoff( void* data, uint size )
+{
+	Renderer* Render = Renderer::GetSingletonPtr();
+	float SpotCutoff = Render->GetActiveLightPtr()->GetSpotCutoff();
+	memcpy( data, (void*)&SpotCutoff, size );
+}
+
+void LightSpotDirection( void* data, uint size )
+{
+	Renderer* Render = Renderer::GetSingletonPtr();
+	glm::vec3 SpotDir = Render->GetActiveLightPtr()->GetSpotDirection();
+	memcpy( data, (void*)&SpotDir, size );
+}

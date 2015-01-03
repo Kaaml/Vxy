@@ -27,6 +27,11 @@ void VertexBuffer::SetVertexData( const std::vector< float > &Vertices )
 	mVertices = Vertices;
 }
 
+void VertexBuffer::SetVertexData( float* data, size_t size )
+{
+	mVertices.resize( size );
+	memcpy( &mVertices[0], data, size );
+}
 void VertexBuffer::Render()
 {
 	if( mVertexSettings.PrimitiveMode == PT_UNKOWN )		// jezeli nie ustawiony typ do renderowania wyjdz

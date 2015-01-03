@@ -5,6 +5,13 @@
 #include "Material.hpp"
 #include "VBOManager.hpp"
 
+struct Vertex_S
+{
+	glm::vec3 vPosition;
+	glm::vec3 vNormal;
+	glm::vec2 vTexCoord;
+};
+
 
 class Surface
 {
@@ -32,6 +39,6 @@ class PrefabShape
 public:
 	PrefabShape(void );
 	static Surface* GenerateRectangle();
-	//static Surface* GeneratePlane();
+	static Surface* GeneratePlane( );
 	//static Surface* GenerateSphere();
 };

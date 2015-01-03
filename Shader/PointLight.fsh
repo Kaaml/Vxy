@@ -82,7 +82,7 @@ void main( void )
 		vec3 R = normalize( -reflect( LightDirection, Normal ) );
 		//vec3 Diffuse = texture2D( iDiffuseTex, f2TexCoord) * NdotL;
 		float RdotE = max( dot( R, CameraPosition), 0.0f );		//specular factor
-		vec3 Specular = pow( RdotE, Shininess );
+		//vec3 Specular = pow( RdotE, Shininess );
 		
 		
 		//Color =  NdotL * LightDiffuse +	LightSpecular;

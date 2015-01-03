@@ -1,5 +1,7 @@
 #include "ObjLoader.h"
 
+std::vector< Surface* > ObjLoader::mSurfaces;
+
 ObjLoader::ObjLoader(void)
 	: mTriangulated( true )
 {
@@ -7,12 +9,14 @@ ObjLoader::ObjLoader(void)
 
 void ObjLoader::LoadAssimp( const std::string &FileName )
 {
+	auto t0 = std::chrono::high_resolution_clock::now();
 	Assimp::Importer Importer;
 	const aiScene *scene = Importer.ReadFile( FileName, 
 		aiProcessPreset_TargetRealtime_Quality );
 	if( !scene )
 	{
 		std::cout << "ASSIMP cos poszlo nie tak\n";
+		std::cout << "ASSIMP ERROR: " << Importer.GetErrorString() << std::endl;
 	}
 
 	//w petli przez wszystkie meshe
@@ -56,9 +60,14 @@ void ObjLoader::LoadAssimp( const std::string &FileName )
 		mGpuBuffer[ i*8 +3] = mNormals[ i ].x;
 		mGpuBuffer[ i*8 +4] = mNormals[ i ].y;
 		mGpuBuffer[ i*8 +5] = mNormals[ i ].z;
-		mGpuBuffer[ i*8 +6] = mTexcoords[ i ].s;
-		mGpuBuffer[ i*8 +7] = mTexcoords[ i ].t;
+		if( mesh->HasTextureCoords(0) ){
+			mGpuBuffer[i * 8 + 6] = mTexcoords[i].s;
+			mGpuBuffer[i * 8 + 7] = mTexcoords[i].t;
+		}
 	}
+	auto t1 = std::chrono::high_resolution_clock::now();
+	std::chrono::milliseconds total_ms = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
+	std::cout << "Time: " << total_ms.count() << " ms " << std::endl;
 	Surface *pSurface = new Surface();
 	VertexBufferManager &VBOMan = VertexBufferManager::GetSingleton();
 	IndexBuffer *pIndex = VBOMan.CreateIndexBuffer();
@@ -84,6 +93,7 @@ void ObjLoader::Load( const std::string &FileName )
 		return;
 	}
 	std::string line;
+	std::string CurrentMaterial( "" );
 	std::stringstream ssbuffer;
 	glm::vec3 tmp;
 	glm::vec2 vec2tmp;
@@ -121,7 +131,7 @@ void ObjLoader::Load( const std::string &FileName )
 		}
 		else if( line[0] == 's' )
 		{
-			// ########## group number ##########
+			// ########## group smoothing when normals are not in obj file  ##########
 		}
 		else if( line[0] ==  'g' )
 		{
@@ -130,18 +140,28 @@ void ObjLoader::Load( const std::string &FileName )
 		else if( line[0] == 'o' )
 		{
 			// ########## object name ##########
-		}
-		else if( line[0] == 'u' )
-		{
-			// ########## material desc ##########
-		}
-		else if( line[0] ==  'm' )
+		} else if( line.compare( 0, 6, "usemtl" ) == 0 )
 		{
 			// ########## material library ##########
+			// nowy material !!!!!!!!
+			// wczytac wszystkie vert, normalki, teexcoordy jako surface
+			if( CurrentMaterial != "" )
+			{
+				std::cout << CurrentMaterial << std::endl;
+				this->Prepare(CurrentMaterial);
+				CurrentMaterial = "";
+			}
+			CurrentMaterial = line.substr( 7 );
+
+		} else if( !line.compare( 0, 5, "mtlib" ) )
+		{
+			// ########## material library file ( [filename].stl )
+			GetMaterial( line.substr( 0, line.length()-6 ) );
+
 		}
 
 	}
-	this->Prepare();
+	this->Prepare( CurrentMaterial );
 }
 
 void ObjLoader::GetFace( const std::string &line )
@@ -151,191 +171,62 @@ void ObjLoader::GetFace( const std::string &line )
 	const bool vt = !mTexcoords.empty();
 	
 	glm::ivec3 tmp[4];
-	//short iStep = 0, iPos = 0, face = 0;
-	//auto it = buffer.begin();
-	/*while( it != buffer.end() )
+	char space;
+	// trujkat nic nie robic tylko wczytac
+	if( vn & vt)
 	{
-		iStep = 1;
-		if( it == line.end() )
-			break;
-		if( *it == '/' )
-		{
-			if( iPos == 0 )
-			{
-				if( !vt && vn )
-				{
-					iPos = 1;
-					iStep++;
-				}
-			}
-			iPos++;
-		}
-		else if( *it == ' ' )
-		{
-			iPos = 0;
-			++face;
-		}
-		else
-		{
-			const unsigned short Value = atoi( &(*it) );
-			int tmp = Value;
-			while( ( tmp = tmp/ 10 )!= 0 )
-			++iStep;
-			if( Value > 0 )
-			{
-					
-				switch( iPos )
-				{
-				case 0:
-					{
-						mVertexIndices.push_back( Value -1 );
-						
-					}
-					break;
-				case 1:
-					{
-
-						mTexIndices.push_back( Value -1 );
-					}
-					break;
-				case 2:
-					{
-						mNormalIndices.push_back( Value -1 );
-					}
-					break;
-				default:
-					std::cerr << "ERROR: cos poszlo nie tak z wczytywaniem pliku\n";
-				}
-
-		}
-
-		}
-		it+=iStep;		
-	}*/
-	if( std::count( buffer.begin(), buffer.end(), ' ' ) == 2 )
+		// NORMALNE I TEKSTURY
+		std::stringstream ssbuf( buffer );
+		ssbuf >> tmp[0].x >> space >> tmp[0].y >> space >> tmp[0].z  /*space*/
+			>> tmp[1].x >> space >> tmp[1].y >> space >> tmp[1].z  /*space*/
+			>>  tmp[2].x >> space >> tmp[2].y >> space >> tmp[2].z;
+			mFaces.push_back( tmp[0] );
+			mFaces.push_back( tmp[1] );
+			mFaces.push_back( tmp[2] );
+		
+	}else if( vn && !vt )
 	{
-		char space;
-		// trujkat nic nie robic tylko wczytac
-		if( vn & vt)
-		{
-			// NORMALNE I TEKSTURY
-			std::stringstream ssbuf( buffer );
-			ssbuf >> tmp[0].x >> space >> tmp[0].y >> space >> tmp[0].z  /*space*/
-				>> tmp[1].x >> space >> tmp[1].y >> space >> tmp[1].z  /*space*/
-				>>  tmp[2].x >> space >> tmp[2].y >> space >> tmp[2].z;
-				mFaces.push_back( tmp[0] );
-				mFaces.push_back( tmp[1] );
-				mFaces.push_back( tmp[2] );
-			
-		}else if( vn && !vt )
-		{
-			// SAME NORMALNE
-			std::stringstream ssbuf( buffer );			
-			ssbuf >> tmp[0].x >> space >> space >> tmp[0].z /*>> space*/
-				>> tmp[1].x >> space >> space >> tmp[1].z  /*>>space*/
-				>> tmp[2].x >> space >> space >> tmp[2].z;
-			tmp[0].y = tmp[1].y = tmp[2].y = 1;
-			mFaces.push_back( tmp[0] );
-			mFaces.push_back( tmp[1] );
-			mFaces.push_back( tmp[2] );
-			
-		}else if( !vn && !vt)
-		{
-			// BRAK NORMALNYCH I TEKSTUR
-			std::stringstream ssbuf( buffer );			
-			ssbuf >> tmp[0].x /*>> space*/
-				>> tmp[1].x /*>> space*/
-				>> tmp[2].x /*>> space*/;
-			tmp[0].y = tmp[1].y = tmp[2].y = 1;
-			tmp[0].z = tmp[1].z = tmp[2].z = 1;
-			mFaces.push_back( tmp[0] );
-			mFaces.push_back( tmp[1] );
-			mFaces.push_back( tmp[2] );
-			
-		}else
-		{
-			// SAME TEXCOORDY
-			std::stringstream ssbuf( buffer );
-			ssbuf >> tmp[0].x >> space >> tmp[0].y >> space
-				>> tmp[1].x >> space >> tmp[1].y >> space
-				>> tmp[2].x >> space >> tmp[2].y;
-			tmp[0].z = tmp[1].z = tmp[2].z = 1;
-			mFaces.push_back( tmp[0] );
-			mFaces.push_back( tmp[1] );
-			mFaces.push_back( tmp[2] );
-		}
+		// SAME NORMALNE
+		std::stringstream ssbuf( buffer );			
+		ssbuf >> tmp[0].x >> space >> space >> tmp[0].z /*>> space*/
+			>> tmp[1].x >> space >> space >> tmp[1].z  /*>>space*/
+			>> tmp[2].x >> space >> space >> tmp[2].z;
+		tmp[0].y = tmp[1].y = tmp[2].y = 1;
+		mFaces.push_back( tmp[0] );
+		mFaces.push_back( tmp[1] );
+		mFaces.push_back( tmp[2] );
+		
+	}else if( !vn && !vt)
+	{
+		// BRAK NORMALNYCH I TEKSTUR
+		std::stringstream ssbuf( buffer );			
+		ssbuf >> tmp[0].x /*>> space*/
+			>> tmp[1].x /*>> space*/
+			>> tmp[2].x /*>> space*/;
+		tmp[0].y = tmp[1].y = tmp[2].y = 1;
+		tmp[0].z = tmp[1].z = tmp[2].z = 1;
+		mFaces.push_back( tmp[0] );
+		mFaces.push_back( tmp[1] );
+		mFaces.push_back( tmp[2] );
+		
 	}else
 	{
-		//DLA CZWOROKATOW
-		std::vector< glm::ivec3 > Indices;
-		char space;
-		// trujkat nic nie robic tylko wczytac
-		if( vn & vt)
-		{
-			// NORMALNE I TEKSTURY
-			std::stringstream ssbuf( buffer );
-			ssbuf >> tmp[0].x >> space >> tmp[0].y >> space >> tmp[0].z >> space
-				>> tmp[1].x >> space >> tmp[1].y >> space >> tmp[1].z >> space
-				>>  tmp[2].x >> space >> tmp[2].y >> space >> tmp[2].z>> space
-				>> tmp[3].x >> space >> tmp[3].y >> space >> tmp[3].z ;
-			Indices.push_back( tmp[0] );
-			Indices.push_back( tmp[1] );
-			Indices.push_back( tmp[2] );
-			Indices.push_back( tmp[3] );
-		}else if( vn && !vt )
-		{
-			// SAME NORMALNE
-			std::stringstream ssbuf( buffer );			
-			ssbuf >> tmp[0].x >> space >> space >> tmp[0].z /*>> space*/
-				>> tmp[1].x >> space >> space >> tmp[1].z  /*>>space*/
-				>> tmp[2].x >> space >> space >> tmp[2].z
-				>> tmp[3].x >> space >> space >> tmp[3].z;
-			tmp[0].y = tmp[1].y = tmp[2].y = tmp[3].y = 1;
-			Indices.push_back( tmp[0] );
-			Indices.push_back( tmp[1] );
-			Indices.push_back( tmp[2] );
-			Indices.push_back( tmp[3] );
-
-		}else if( !vn && !vt)
-		{
-			// BRAK NORMALNYCH I TEKSTUR
-			std::stringstream ssbuf( buffer );			
-			ssbuf >> tmp[0].x /*>> space*/
-				>> tmp[1].x /*>> space*/
-				>> tmp[2].x /*>> space*/
-				>> tmp[3].x /*> space*/;
-			tmp[0].y = tmp[1].y = tmp[2].y = tmp[3].y = 1;
-			tmp[0].z = tmp[1].z = tmp[2].z = tmp[3].z = 1;
-			Indices.push_back( tmp[0] );
-			Indices.push_back( tmp[1] );
-			Indices.push_back( tmp[2] );
-			Indices.push_back( tmp[3] );
-		}else
-		{
-			// SAME TEXCOORDY
-			std::stringstream ssbuf( buffer );			
-				ssbuf >> tmp[0].x >> space >> tmp[0].y >> space
-					>> tmp[1].x >> space >> tmp[1].y >> space
-					>> tmp[2].x >> space >> tmp[2].y >> space 
-					>> tmp[3].x >> space >> tmp[3].y;
-				tmp[0].z = tmp[1].z = tmp[2].z = tmp[3].z = 1;
-				Indices.push_back( tmp[0] );
-				Indices.push_back( tmp[1] );
-				Indices.push_back( tmp[2] );
-				Indices.push_back( tmp[3] );			
-		}
-		// indices od 1 do 4				   0________1
-		mFaces.push_back( Indices[0] );		//	|\     /|
-		mFaces.push_back( Indices[1] );		//	| \   / |
-		mFaces.push_back( Indices[2] );		//	|  \ /  |
-		mFaces.push_back( Indices[0] );		//	|   X   |
-		mFaces.push_back( Indices[2] );		//	|  / \  |
-		mFaces.push_back( Indices[3] );		// 3|_/___\_|2
-
+		// SAME TEXCOORDY
+		std::stringstream ssbuf( buffer );
+		ssbuf >> tmp[0].x >> space >> tmp[0].y >> space
+			>> tmp[1].x >> space >> tmp[1].y >> space
+			>> tmp[2].x >> space >> tmp[2].y;
+		tmp[0].z = tmp[1].z = tmp[2].z = 1;
+		mFaces.push_back( tmp[0] );
+		mFaces.push_back( tmp[1] );
+		mFaces.push_back( tmp[2] );
 	}
+	
+		
+	
 }
 
-void ObjLoader::Prepare()
+void ObjLoader::Prepare(const std::string &MaterialName )
 {
 	mGpuBuffer.reserve( mVertexMap.size() * 8 );
 	mGpuBuffer.resize( mVertexMap.size() * 8  );
@@ -344,8 +235,8 @@ void ObjLoader::Prepare()
 		mGpuBuffer[ it.second*8 ] = mVertex[ it.first.x ].x;
 		mGpuBuffer.at( it.second*8+1 ) = mVertex[ it.first.x ].y;
 		mGpuBuffer.at( it.second*8+2 ) = mVertex[ it.first.x ].z;
-		//NORMALNE
-		if( (it.first.y != -1) && ( mNormals.size() > 0 ) )
+		//NORMALNE f V/VT/VN V/VT/VN
+		if( (it.first.z != -1) && ( mNormals.size() > 0 ) )
 		{
 			mGpuBuffer.at( it.second*8+3 ) = mNormals[ it.first.z ].x;
 			mGpuBuffer.at( it.second*8+4 ) = mNormals[ it.first.z ].y;
@@ -357,7 +248,7 @@ void ObjLoader::Prepare()
 			mGpuBuffer.at( it.second*8+5 ) = 0.f;
 		}
 		//texcoord
-		if( it.first.z != -1 && ( mTexcoords.size() > 0 ) )
+		if( it.first.y != -1 && ( mTexcoords.size() > 0 ) )
 		{
 			mGpuBuffer.at( it.second*8+6 ) = mTexcoords[ it.first.y ].s;
 			mGpuBuffer.at( it.second*8+7 ) = mTexcoords[ it.first.y ].t;
@@ -382,9 +273,13 @@ void ObjLoader::Prepare()
 	pVertex->SetVertexData( mGpuBuffer );
 	pVertex->Prepare();
 	pSurface->SetVertexBuffer( pVertex );
+	MaterialManager &MatMgr = MaterialManager::GetSingleton();
+	pSurface->SetMaterial( MatMgr.GetMaterialPtr( MaterialName ) );
 	mSurfaces.push_back( pSurface );
-	
 
+	mGpuBuffer.clear();
+	mGpuIndices.clear();
+	mVertexMap.clear();
 }
 
 ObjLoader::~ObjLoader(void)
@@ -395,60 +290,99 @@ void ObjLoader::GetFace_t( std::string &line )
 {
 	line = line.substr(2);
 	std::vector<int> FaceCorners; // rogi œcian
-	size_t it = line.find_first_of( ' ' );
-	glm::ivec3 tmp( -1 );
-	//fVertex tmp;
-	while( std::string::npos != it )
-	{
-		std::string word = line.substr( 0, it );
-		// wyciagnij dane z word
-		//std::cout << word << std::endl;
-		GetDataFromFaceWord( &word[0],(int*) &tmp, &word[ word.length() ]+1 );
-		auto s = mVertexMap.find( tmp );
-		
-		if( s != mVertexMap.end() )
-		{
-			FaceCorners.push_back(s->second );
-			// je¿eli taki wierzcho³ek ju¿ jest wrzuæ indeks do tmp buffora
-		}else
-		{
-			/*currMtl->Meshbuffer->Vertices.push_back(v);
-			vertLocation = currMtl->Meshbuffer->Vertices.size() -1;
-			currMtl->VertMap.insert(v, vertLocation*/
-			// wrzuc unikalny wierzcholek do mapy
-			int Size = mVertexMap.size();
-			mVertexMap.insert( std::pair<glm::ivec3, int >( tmp,Size ) );
-			// wrzuc jego wartosc do tmp bufora 
-			FaceCorners.push_back( Size );
-		}
+	//size_t it = line.find_first_of( ' ' );
+	//glm::ivec3 tmp( -1 );
+	////fVertex tmp;
+	//while( std::string::npos != it )
+	//{
+	//	std::string word = line.substr( 0, it );
+	//	GetDataFromFaceWord( &word[0],(int*) &tmp, &word[ word.length() ]+1 );  //wyciaga f 1/2/3 
+	//	auto s = mVertexMap.find( tmp );
+	//	
+	//	if( s != mVertexMap.end() )
+	//	{
+	//		FaceCorners.push_back(s->second );
+	//		// je¿eli taki wierzcho³ek ju¿ jest wrzuæ indeks do tmp buffora
+	//	}else
+	//	{
+	//		// wrzuc unikalny wierzcholek do mapy
+	//		int Size = mVertexMap.size();
+	//		mVertexMap.insert( std::pair<glm::ivec3, int >( tmp,Size ) );
+	//		// wrzuc jego wartosc do tmp bufora 
+	//		FaceCorners.push_back( Size );
+	//	}
 
-		line = line.substr( it+1, line.length() );
-		it = line.find_first_of(' ');
-	};		// END of WHILE
-	GetDataFromFaceWord( &line[0], (int*)&tmp, &line[ line.length() ]+1 );
-		auto s = mVertexMap.find( tmp );
-		if( s != mVertexMap.end() )
+	//	line = line.substr( it+1, line.length() );
+	//	it = line.find_first_of(' ');		
+	//};		// END of WHILE
+	//GetDataFromFaceWord( &line[0], (int*)&tmp, &line[ line.length() ]+1 );
+	//auto s = mVertexMap.find( tmp );
+	//if( s != mVertexMap.end() )
+	//{
+	//	FaceCorners.push_back(s->second );
+	//	// je¿eli taki wierzcho³ek ju¿ jest wrzuæ indeks do tmp buffora
+	//} else
+	//{
+	//	// wrzuc unikalny wierzcholek do mapy
+	//	int Size = mVertexMap.size();
+	//	mVertexMap.insert( std::pair<glm::ivec3, int >( tmp, Size ) );
+	//	// wrzuc jego wartosc do tmp bufora 
+	//	FaceCorners.push_back( Size );
+	//};
+
+	//nowa petelka z uwzglednieniem spacji na koncu etc
+	std::string svertex;		// opis punkty np "1/2/3"
+	//std::string::iterator
+	glm::ivec3 tmp( -1 );
+	for( unsigned i = 0; i <= line.size(); ++i )
+	{
+		
+		svertex += line[i];
+
+		if( line[i] == ' ' || i == line.size() && svertex.size() > 1 )
 		{
-			FaceCorners.push_back(s->second );
-			// je¿eli taki wierzcho³ek ju¿ jest wrzuæ indeks do tmp buffora
-		}else
+			if( svertex.size() > 2 )
+				GetDataFromFaceWord( &svertex[0], (int*)&tmp, &svertex[0] + svertex.size()+1 );
+
+			auto s = mVertexMap.find( tmp );
+			if( s != mVertexMap.end() )
+			{
+				FaceCorners.push_back( s->second );
+				// je¿eli taki wierzcho³ek ju¿ jest wrzuæ indeks do tmp buffora
+			} else
+			{
+				// wrzuc unikalny wierzcholek do mapy
+				int Size = mVertexMap.size();
+				mVertexMap.insert( std::pair<glm::ivec3, int >( tmp, Size ) );
+				// wrzuc jego wartosc do tmp bufora 
+				FaceCorners.push_back( Size );
+			}
+			svertex.clear();
+		} /*else
 		{
-			/*currMtl->Meshbuffer->Vertices.push_back(v);
-			vertLocation = currMtl->Meshbuffer->Vertices.size() -1;
-			currMtl->VertMap.insert(v, vertLocation*/
-			// wrzuc unikalny wierzcholek do mapy
-			int Size = mVertexMap.size();
-			mVertexMap.insert( std::pair<glm::ivec3, int >( tmp,Size ) );
-			// wrzuc jego wartosc do tmp bufora 
-			FaceCorners.push_back( Size );
-		};
+			if( line[i] != ' ' )
+				svertex += line[i];
+		}*/
+
+
+	}
+	
+
+
+
+
+
 	// poprawic warunek petli jakby cos bo jest zly dlatego to ^ tu jest
 	//triangulacja polygonów
-	for( unsigned int i = 1; i < FaceCorners.size() - 1; ++i )
+	for( unsigned int i = 1; i < FaceCorners.size() - 1; ++i )		// max 4
 	{
+		/*mGpuIndices.push_back( FaceCorners[0] );
+		mGpuIndices.push_back( FaceCorners[i] );
+		mGpuIndices.push_back( FaceCorners[i+1] );*/
+
 		mGpuIndices.push_back( FaceCorners[0] );
-		mGpuIndices.push_back( FaceCorners[1] );
-		mGpuIndices.push_back( FaceCorners[2] );
+		mGpuIndices.push_back( FaceCorners[i] );
+		mGpuIndices.push_back( FaceCorners[i + 1] );
 
 	}
 	
@@ -548,4 +482,17 @@ bool ObjLoader::GetDataFromFaceWord( char* vertexData, int* index, const char* b
 std::vector< Surface* >& ObjLoader::GetSurfaces()
 {
 	return mSurfaces;
+}
+
+
+void ObjLoader::GetMaterial( const std::string &matFile )
+{
+	std::fstream File( matFile.c_str(), std::ios::in | std::ios::binary );
+	if( !File.is_open() )
+	{
+		std::cerr << "EROR: Nie mozna otworzyc pliku: " << matFile << std::endl;
+		return;
+	}
+
+
 }

@@ -1,6 +1,6 @@
 #pragma once
-#include "../Include.hpp"
-#include "../Renderer.hpp"
+#include "Include.hpp"
+#include "Renderer.hpp"
 
 class RenderStage
 {

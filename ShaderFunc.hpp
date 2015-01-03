@@ -19,6 +19,10 @@ void LightAmbient( void* data, uint size );
 void LightDiffuse( void* data, uint size );
 void LightSpecular( void* data, uint size );
 void LightSpecularPower( void* data, uint size );
+void LightSpotCutoff( void* data, uint size );
+void LightSpotDirection( void* data, uint size );
 
 void CameraPosition( void* data, uint size );
+void ScreenResolution( void* data, uint size );
+
 

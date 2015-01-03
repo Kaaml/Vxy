@@ -21,7 +21,7 @@ void main()
 	LightDirection = normalize( LightDirection );
 	
 	vec4 AmbientColor = vec4(Light.Color, 1.0f) * Light.AmbientIntensity;
-    float DiffuseFactor = dot(Normal, -LightDirection);
+    float DiffuseFactor = dot(Normal, -LightDirection);		//N dot L
 
     vec4 DiffuseColor  = vec4(0, 0, 0, 0);
     vec4 SpecularColor = vec4(0, 0, 0, 0);
@@ -31,7 +31,7 @@ void main()
 
         vec3 VertexToEye = normalize(gEyeWorldPos - WorldPos);
         vec3 LightReflect = normalize(reflect(LightDirection, Normal));
-        float SpecularFactor = dot(VertexToEye, LightReflect);
+        float SpecularFactor = dot(VertexToEye, LightReflect);          // H= E dot L
         SpecularFactor = pow(SpecularFactor, gSpecularPower);
         if (SpecularFactor > 0) {
             SpecularColor = vec4(Light.Color, 1.0f) * gMatSpecularIntensity * SpecularFactor;

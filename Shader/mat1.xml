@@ -1,31 +1,618 @@
 ﻿<materials>
-  <texture name="textura" file="data/tekstura.tga" />
+	<texture name="textura1" file="Data/Banana.jpg" />
+	<texture name="kamien" file="Data/sibenik/kamen.png" />
+	<texture name="terrain_background" file="Data/terrain_grid.jpg" />
+	<texture name="grass" file="Data/grass.jpg" />
+	<texture name="Normal" width="1366" height="776" mipmap="0" format="RGB"/>
 
-  <material name="point_light" >
-    <pass name="light" >
-      <shader name="PointLight" >
+	<texture name="01_ST_KP" file="Data/dabrovic-sponza/01_ST_KP.jpg" />
+	<texture name="SP_LUK" file="Data/dabrovic-sponza/SP_LUK.JPG" />
+	<texture name="KAMEN" file="Data/dabrovic-sponza/KAMEN.JPG" />
+	<texture name="PROZOR1" file="Data/dabrovic-sponza/PROZOR1.JPG" />
+	<texture name="01_STUB" file="Data/dabrovic-sponza/01_STUB.JPG" />
+	<texture name="KAMEN-stup" file="Data/dabrovic-sponza/KAMEN-stup.JPG" />
+	<texture name="VRATA_KO" file="Data/dabrovic-sponza/VRATA_KO.JPG" />
+	<texture name="VRATA_KR" file="Data/dabrovic-sponza/VRATA_KR.JPG" />
+	<texture name="01_S_BA" file="Data/dabrovic-sponza/01_S_BA.JPG" />
+	<texture name="tsibenik13" file="Data/dabrovic-sponza/blank.jpg" />
+	<texture name="X01_ST" file="Data/dabrovic-sponza/X01_ST.JPG" />
+	<texture name="RELJEF" file="Data/dabrovic-sponza/RELJEF.JPG" />
+	<texture name="00_SKAP" file="Data/dabrovic-sponza/00_SKAP.JPG" />	
+	<texture name="color1" file="Data/dabrovic-sponza/color1.jpg" />	
+	
+	<material name="default" >
+		<pass name="default" >
+		<shader name="default" >
+			<source>
+			<vertex file="Shader/default.vsh" ></vertex>
+			<fragment file="Shader/default.fsh" ></fragment>
+			</source>
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		</pass>
+	</material>	
+	
+	<material name="point_light" >
+		<pass name="light" >
+		<shader name="diffuse" >
+			<source>
+			<vertex file="Shader/diffuse.vsh" ></vertex>
+			<fragment file="Shader/diffuse.fsh" ></fragment>
+			</source>
+	
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+			<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+			<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+			<uniform name="Ambient" type="vec3" > </uniform>
+			<uniform name="Diffuse" type="vec3" > </uniform>
+			<uniform name="Specular" type="vec3" > </uniform>
+			<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<sampler texture="textura1" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+			</pass>
+	</material>
+	
+	<material name="sponza" >
+		<pass name="sponza" >
+		<shader name="diffuse" >
+			<source>
+			<vertex file="Shader/diffuse.vsh" ></vertex>
+			<fragment file="Shader/diffuse.fsh" ></fragment>
+			</source>
+	
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+			<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+			<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+			<uniform name="Ambient" type="vec3" > </uniform>
+			<uniform name="Diffuse" type="vec3" > </uniform>
+			<uniform name="Specular" type="vec3" > </uniform>
+			<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<sampler texture="kamien" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+			</pass>
+		</material>
+	
+	<material name="DirectLight" >
+		<pass name="directLight" >
+		<shader name="DirectLight" >
+			<source>
+			<vertex file="Shader/DirectLight.vsh" ></vertex>
+			<fragment file="Shader/DirectLight.fsh" ></fragment>
+			</source>
+	
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>      
+			<uniform name="CameraPosition" type="vec3" > </uniform>
+			<uniform name="ScreenSize" type="vec2" > </uniform>
+			<uniform name="Light.Position" type="vec3" > </uniform>
+			<uniform name="Light.Color" type="vec3" > </uniform>
+			<uniform name="Light.SpecularExponent" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<sampler texture="textura1" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="SpotLight" >
+		<pass name="spotLight" >
+		<shader name="SpotLight" >
+			<source>
+			<vertex file="Shader/SpotLight.vsh" ></vertex>
+			<fragment file="Shader/SpotLight.fsh" ></fragment>
+			</source>
+	
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>      
+			<uniform name="CameraPosition" type="vec3" > </uniform>
+			<uniform name="ScreenSize" type="vec2" > </uniform>
+			<uniform name="Light.Position" type="vec3" > </uniform>
+			<uniform name="Light.Color" type="vec3" > </uniform>
+			<uniform name="Light.SpecularExponent" type="float" > </uniform>
+			<uniform name="Light.SpotDirection" type="vec3" > </uniform>
+			<uniform name="Light.SpotCutoff" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<sampler texture="textura1" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="flat" >
+		<pass name="flat" >
+		<shader name="default" >
+			<source>
+			<vertex file="Shader/default.vsh" ></vertex>
+			<fragment file="Shader/default.fsh" ></fragment>
+			</source>
+	
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<!-- <sampler texture="textura1" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler> -->
+		</pass>
+	</material>
+	
+	<material name="terrain" >
+    <pass name="terrain" >
+      <shader name="terrain" >
         <source>
-          <vertex file="Shader/PointLight.vsh" ></vertex>
-          <fragment file="Shader/PointLight.fsh" ></fragment>
+          <vertex file="Shader/terrain.vsh" ></vertex>
+          <fragment file="Shader/terrain.fsh" ></fragment>
         </source>
 
         <uniform name="ModelViewProjection" type="mat4x4" ></uniform>
-        <uniform name="ModelViewMatrix" type="mat4x4" > </uniform>
-        <uniform name="CameraPosition" type="vec3" > </uniform>
-        <uniform name="LightPosition" type="vec3" > </uniform>
-        <uniform name="LightAmbient" type="vec3" > </uniform>
-        <uniform name="LightDiffuse" type="vec3" > </uniform>
-        <uniform name="LightSpecular" type="vec3" > </uniform>
-        <uniform name="LightPosition" type="vec3" > </uniform>
-        <uniform name="LightRadius" type="float" > </uniform>
-        <uniform name="LightSpecularPower" type="float" > </uniform>
         <!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
       </shader>
-      <sampler texture="textura" sampler="1" min_filter="" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+      <sampler texture="terrain_background" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
+	  <sampler texture="grass" sampler="1" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
     </pass>
+  </material> 
+<!-- SPONZA MATERIALS -->
+  <material name="sp_00_luk_mal1" >
+		<pass name="sponza1" >
+		<shader name="diffuse" >
+			<source>
+			<vertex file="Shader/diffuse.vsh" ></vertex>
+			<fragment file="Shader/diffuse.fsh" ></fragment>
+			</source>
+	
+			<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+			<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+			<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+			<uniform name="Ambient" type="vec3" > </uniform>
+			<uniform name="Diffuse" type="vec3" > </uniform>
+			<uniform name="Specular" type="vec3" > </uniform>
+			<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<sampler texture="01_ST_KP" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+			</pass>
+	</material>
+	
+	<material name="sp_00_luk_mali" >
+		<pass name="sponza2" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="SP_LUK" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_pod" >
+		<pass name="sponza3" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="KAMEN" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_prozor" >
+		<pass name="sponza4" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="PROZOR1" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_stup" >
+		<pass name="sponza5" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="01_STUB" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_svod" >
+		<pass name="sponza6" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="KAMEN-stup" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_ck" >
+		<pass name="sponza7" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="VRATA_KO" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
 
+	<material name="sp_00_vrata_krug" >
+		<pass name="sponza8" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="VRATA_KR" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_zid" >
+		<pass name="sponza9" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="KAMEN" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_01_luk_a" >
+		<pass name="sponza10" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="SP_LUK" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_01_stub" >
+		<pass name="sponza11" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="01_STUB" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_01_stub_baza" >
+		<pass name="sponza12" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="01_S_BA" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_01_stub_baza_" >
+		<pass name="sponza13" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="color1" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
 
+	<material name="sp_01_stub_kut" >
+		<pass name="sponza14" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
 
-  </material>
-
+		<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+		</shader>
+		<sampler texture="01_STUB" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+	</pass>
+	</material>
+	
+	<material name="sp_01_stup" >
+		<pass name="sponza15" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="X01_ST" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_01_stup_baza" >
+		<pass name="sponza16" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="01_S_BA" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_02_reljef" >
+		<pass name="sp_02_reljef" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="RELJEF" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_svod_kapitel" >
+		<pass name="sp_svod_kapitel" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="00_SKAP" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_vijenac" >
+		<pass name="sp_vijenac" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="00_SKAP" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="" wrap_t=""> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_zid_vani" >
+		<pass name="sp_zid_vani" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="KAMEN" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
+		</pass>
+	</material>
+	
+	<material name="sp_00_vrata_kock" >
+		<pass name="sp_00_vrata_kock" >
+			<shader name="diffuse" >
+				<source>
+					<vertex file="Shader/diffuse.vsh" ></vertex>
+					<fragment file="Shader/diffuse.fsh" ></fragment>
+				</source>
+	
+				<uniform name="ModelViewProjection" type="mat4x4" ></uniform>
+				<uniform name="NormalMatrix" type="mat3x3" > </uniform>
+				<uniform name="ModelMatrix" type="mat4x4" > </uniform>
+				<uniform name="Ambient" type="vec3" > </uniform>
+				<uniform name="Diffuse" type="vec3" > </uniform>
+				<uniform name="Specular" type="vec3" > </uniform>
+				<uniform name="Shininess" type="float" > </uniform>
+	
+			<!-- <texture name="nazwa_z_MGR" sampler="1" filter_min="" filter_mag"" /> -->
+			</shader>
+			<sampler texture="VRATA_KO" sampler="0" min_filter="NEAREST" mag_filter="" wrap_s="REPEAT" wrap_t="REPEAT"> </sampler>
+		</pass>
+	</material>
+	
+	
 </materials>

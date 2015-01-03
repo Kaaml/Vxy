@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Include.hpp"
-#include "../Renderer.hpp"
-#include "../cShaderManager.hpp"
-#include "../TextureSampler.hpp"
+#include "Include.hpp"
+#include "Renderer.hpp"
+#include "cShaderManager.hpp"
+#include "TextureSampler.hpp"
 
 
 class RenderPass

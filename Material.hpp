@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "Texture2D.hpp"
 #include "cShaderManager.hpp"
-#include "Renderer/RenderPass.hpp"
+#include "RenderPass.hpp"
 
 class RenderPass;
 enum TEXTURE_USAGE
@@ -58,7 +58,7 @@ private:
 	glm::vec3 mDiffuse;		// wsp odbicia dla swiadtla rozproszonego
 	glm::vec3 mSpecular;	// wsp odbicia dla swiadtla zwierciadlanego
 
-	std::map< TEXTURE_USAGE, Texture2D* > mMaterialTextures;
+	//std::map< TEXTURE_USAGE, Texture2D* > mMaterialTextures;
 	float mShininess;		// wyk³adnik rozblysku <0; 128>
 	std::string mShaderName;
 	

@@ -5,13 +5,13 @@
 #include "Node.hpp"
 
 
-class Loader
-{
-	Loader();
-	virtual void Load( std::string Name ) = 0;
-	virtual std::vector< Surface*>& GetSurfaces() = 0;
-	virtual ~Loader();
-};
+//class Loader
+//{
+//	Loader();
+//	virtual void Load( std::string Name ) = 0;
+//	virtual std::vector< Surface*>& GetSurfaces() = 0;
+//	virtual ~Loader();
+//};
 
 class SceneManager : public Singleton<SceneManager>
 {

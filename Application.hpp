@@ -38,6 +38,7 @@ private:
 	IndexBuffer* Indices;
 	VertexDeclaration vdec;
 	std::vector< Surface* > Surfaces;
+	Surface* pSurface;
 	GLuint hVAO;
 	GLuint hVBO;
 	GLuint hIBO;

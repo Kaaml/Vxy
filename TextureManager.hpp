@@ -12,7 +12,7 @@ public:
 	Texture2D& GetTexture( const std::string &Name );
 	void LoadTexture( const std::string &Name, const std::string &Path );
 	void CreateTexture( uint width, uint height, uint mipmaplvl, FORMAT format, const std::string &name );
-	void Parse( pugi::xml_node &Node );
+	void Parse( const pugi::xml_node &Node );
 	TextureManager(void);
 	~TextureManager(void);
 

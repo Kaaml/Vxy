@@ -2,6 +2,9 @@
 #include "Include.hpp"
 #include "Surface.hpp"
 #include "VBOManager.hpp"
+#include <chrono>
+#include <unordered_map>
+#include <functional>
 
 //#include <assimp.h>
 #include <aiPostProcess.h>
@@ -40,19 +43,34 @@ struct fVertex
 struct less
 {
 	bool operator()(const glm::ivec3& lhs, const glm::ivec3& rhs ) const
-	{	// apply operator< to operands
-		//return (bool)glm::lessThan( _Left, _Right ).x;
+	{	// apply operator< to operands		
 		return (lhs.x < rhs.x) || 
 			(	( lhs.x == rhs.x) && ( ( lhs.y < rhs.y) || 
 				(( lhs.y == rhs.y) && ( lhs.z < rhs.z) )));
 	}
 };
+struct HashIvec3
+{
+	size_t operator() ( const glm::ivec3 &k ) const
+	{
+		return std::hash<int>()( k.x ) ^ std::hash<int>()( k.y ) ^ std::hash<int>()( k.z );
+	}
+};
+
+struct Equal
+{
+	bool operator()( const glm::ivec3& lhs, const glm::ivec3& rhs ) const
+	{	// apply operator< to operands		
+		return ( (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z) );
+	}
+};
+
 class ObjLoader
 {
 public:
 	ObjLoader(void);
-	static void Load( const std::string &FileName );
-	static void LoadAssimp( const std::string &FileName );
+	void Load( const std::string &FileName );
+	void LoadAssimp( const std::string &FileName );
 	static std::vector< Surface*>& GetSurfaces();
 	~ObjLoader(void);
 private:
@@ -62,15 +80,17 @@ private:
 	std::vector< float > mGpuBuffer;
 	std::vector< int > mGpuIndices;
 	std::vector< glm::ivec3 > mFaces;
-	std::map< glm::ivec3, int , less> mVertexMap;
+	std::unordered_map < glm::ivec3, int, HashIvec3, Equal > mVertexMap;
+	//std::map< glm::ivec3, int , less> mVertexMap;
 	void GetFace( const std::string &line );	
 	void GetFace_t( std::string &line );
-	void Prepare( void );
+	void Prepare( const std::string &MaterialName );
+	void GetMaterial( const std::string &matFile );
 	short WordsSize( char* startPtr, char* endPtr );
 	bool GetDataFromFaceWord( char* vertexData, int* index, const char* buffEnd );
 	char* GetNextWorld( char* startPtr, char* endPtr );
 	bool mTriangulated;
-	std::vector< Surface* > mSurfaces;
+	static std::vector< Surface* > mSurfaces;
 
 	bool cmp( std::pair< glm::ivec3, int > &lhs,  std::pair< glm::ivec3, int > &rhs ); 
 };

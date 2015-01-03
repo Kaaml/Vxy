@@ -9,7 +9,7 @@
 #include "Singleton.hpp"
 #include "Light.hpp"
 #include "TextureManager.hpp"
-
+#include "MaterialManager.hpp"
 
 
 class Renderer : public Singleton< Renderer >
@@ -49,11 +49,13 @@ public:
 	const glm::mat4& GetViewMatrix() const;
 	const glm::mat4& GetProjectionMatrix() const;
 	const glm::mat3& GetNormalMatrix() const;
+	const glm::vec2& GetResolution() const;
 	~Renderer(void);
+	void InitRendering();
 
 private:
 	// Deferred rendering method <-- prezkszta³cic na klasy czy cos normalniejszego
-	void InitRendering();
+	
 	void GeometryPass();
 	void LightPass();
 	Fbo *pDeferred;
@@ -70,7 +72,9 @@ private:
 	Material *pDirectLightMaterial;
 	Material *pSpotLightMaterial;
 
-	Surface *ScreenSurface;
+	Surface *DirectLightSurface;		// powierzchnia dla œwiatla kierunkowego
+	Surface *SpotLightSurface;			// powierzchnia dla œwiatla reflektorowego
+	Surface *PointLightSurface;			// powierzchnia dla œwiat³¹ punktowego
 
 	glm::mat4 mModelMatrix;
 	glm::mat4 mViewMatrix;
@@ -100,3 +104,8 @@ inline const glm::mat4& Renderer::GetProjectionMatrix() const {
 inline const glm::mat3& Renderer::GetNormalMatrix() const {
 	return mNormalMatrix;
 };
+
+inline const glm::vec2& Renderer::GetResolution() const
+{
+	return mViewSize;
+}

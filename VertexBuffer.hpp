@@ -29,8 +29,9 @@ public:
 	VertexBuffer( const VertexSettings& settings );
 	void Render();
 	// Przesy³a dane wierzcho³ków do sterownika
-	void SetVertexData( const std::vector < float > &Indices );
-	//void SetVertexData( float* Data, size_t count );
+	void SetVertexData( const std::vector < float > &Vertices );
+	// dla innego typu danych etc
+	void SetVertexData( float* Data, size_t size );
 	void Prepare();
 	void Bind();
 	void UnBind();

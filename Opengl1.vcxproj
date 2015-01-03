@@ -40,10 +40,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\Library\assimp--2.0.863-sdk\include\;D:\Library\glfw_3.0.1\include;D:\Library\pugixml-1.2\src;D:\Library\glew-1.7.0\include;D:\library\glm-0.9.3.2\;D:\library\DevIL-SDK-x86-1.7.8\include;$(IncludePath)</IncludePath>
+    <IncludePath>c:\Program Files\FBX_SDK_2014.1\include\;D:\Library\assimp--2.0.863-sdk\include\;D:\Library\glfw_3.0.1\include;D:\Library\pugixml-1.2\src;D:\Library\glew-1.7.0\include;D:\library\glm-0.9.3.2\;D:\library\DevIL-SDK-x86-1.7.8\include;D:\Library\gli-0.5.1.1\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>d:\Library\assimp--2.0.863-sdk\lib\assimp_debug-dll_win32;D:\Library\glfw_3.0.1\lib-msvc110;D:\Library\glew-1.7.0\lib;D:\Library\DevIL-SDK-x86-1.7.8\lib;D:\Library\GLFW-2.7.2\lib-msvc100\debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>c:\Program Files\FBX_SDK_2014.1\lib\vs2012;d:\Library\assimp--2.0.863-sdk\lib\assimp_debug-dll_win32;D:\Library\glfw_3.0.1\lib-msvc110;D:\Library\glew-1.7.0\lib;D:\Library\DevIL-SDK-x86-1.7.8\lib;D:\Library\GLFW-2.7.2\lib-msvc100\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -53,6 +53,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;DevIL.lib;ILUT.lib;ILU.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,7 +74,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="CameraMatrix.cpp" />
     <ClCompile Include="cCamera.cpp" />
-    <ClCompile Include="cMaterial.cpp" />
     <ClCompile Include="cMesh3d.cpp" />
     <ClCompile Include="cModel.cpp" />
     <ClCompile Include="cProgramShader.cpp" />
@@ -103,6 +103,7 @@
     <ClCompile Include="TextureSampler.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Uniform.cpp" />
+    <ClCompile Include="UniformObject.cpp" />
     <ClCompile Include="VBOManager.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexDeclaration.cpp" />
@@ -112,7 +113,6 @@
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="CameraMatrix.hpp" />
     <ClInclude Include="cCamera.hpp" />
-    <ClInclude Include="cMaterial.hpp" />
     <ClInclude Include="cMesh3d.hpp" />
     <ClInclude Include="cModel.hpp" />
     <ClInclude Include="cProgramShader.hpp" />
@@ -136,6 +136,7 @@
     <ClInclude Include="Surface.hpp" />
     <ClInclude Include="TextureManager.hpp" />
     <ClInclude Include="TextureSampler.hpp" />
+    <ClInclude Include="UniformObject.hpp" />
     <ClInclude Include="VBOManager.hpp" />
     <ClInclude Include="VertexDeclaration.hpp" />
     <ClInclude Include="VerticesEnums.hpp" />
@@ -148,7 +149,6 @@
     <ClInclude Include="VertexBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="Shader\Texture.shad" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
